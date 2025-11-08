@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Guidance Test</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border: #e5e5e5;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent: #60a5fa;
+            --accent-hover: #3b82f6;
+            --border: #3a3a3a;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            transition: background 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-small {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .btn-small:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .active-lang {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* Info Button */
+        .info-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px var(--shadow);
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+
+        .info-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            padding: 40px;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: var(--text-secondary);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .modal p {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .modal ul {
+            margin-left: 20px;
+            color: var(--text-secondary);
+        }
+
+        .modal li {
+            margin: 8px 0;
+        }
+
+        /* Landing Page */
+        .landing {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+        }
+
+        .landing h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .landing p {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 10px;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            padding: 14px 38px;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Quiz Section */
+        .quiz {
+            display: none;
+        }
+
+        .quiz.active {
+            display: block;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .question-number {
+            color: var(--accent);
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            padding: 18px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1em;
+            text-align: left;
+        }
+
+        .option:hover {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: white;
+        }
+
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        /* Results */
+        .results {
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .result-card {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border: 2px solid var(--accent);
+        }
+
+        .result-card h2 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+
+        .result-card p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .career-match {
+            background: var(--bg-primary);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent);
+        }
+
+        .career-match h3 {
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .career-match ul {
+            margin-left: 20px;
+            color: var(--text-secondary);
+        }
+
+        .career-match li {
+            margin: 5px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 5px 5px 5px 0;
+        }
+
+        .badge-salary {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        [data-theme="dark"] .badge-salary {
+            background: #14532d;
+            color: #86efac;
+        }
+
+        .badge-growth {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        [data-theme="dark"] .badge-growth {
+            background: #713f12;
+            color: #fde047;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .landing h1 {
+                font-size: 2em;
+            }
+
+            .question-card {
+                padding: 25px;
+            }
+
+            .question-text {
+                font-size: 1.2em;
+            }
+
+            .result-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="info-btn" onclick="openInfoModal()">ℹ️</button>
+
+    <!-- Info Modal -->
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeInfoModal()">×</button>
+            <h2 data-en="What This Site Offers" data-ru="Что Предлагает Этот Сайт">What This Site Offers</h2>
+            <p data-en="This career guidance test helps high school students discover careers that match their interests, skills, and personality." data-ru="Этот тест по профориентации помогает школьникам найти профессии, которые соответствуют их интересам, навыкам и личности.">
+                This career guidance test helps high school students discover careers that match their interests, skills, and personality.
+            </p>
+            <h3 data-en="How It Works:" data-ru="Как Это Работает:">How It Works:</h3>
+            <ul>
+                <li data-en="Answer 12 questions about your interests and preferences" data-ru="Ответь на 12 вопросов о твоих интересах и предпочтениях">Answer 12 questions about your interests and preferences</li>
+                <li data-en="Our algorithm analyzes your responses" data-ru="Наш алгоритм анализирует твои ответы">Our algorithm analyzes your responses</li>
+                <li data-en="Get personalized career recommendations with salary info and growth prospects" data-ru="Получи персональные рекомендации профессий с информацией о зарплате и перспективах">Get personalized career recommendations with salary info and growth prospects</li>
+            </ul>
+            <h3 style="margin-top: 20px;" data-en="Career Categories:" data-ru="Категории Профессий:">Career Categories:</h3>
+            <ul>
+                <li data-en="Technology & IT" data-ru="Технологии и IT">Technology & IT</li>
+                <li data-en="Healthcare" data-ru="Здравоохранение">Healthcare</li>
+                <li data-en="Business & Marketing" data-ru="Бизнес и Маркетинг">Business & Marketing</li>
+                <li data-en="Creative & Design" data-ru="Креатив и Дизайн">Creative & Design</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div class="modal" id="aboutModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAboutModal()">×</button>
+            <h2 data-en="About This Project" data-ru="О Проекте">About This Project</h2>
+            <p data-en="This career guidance platform was created to help high school students make informed decisions about their future careers." data-ru="Эта платформа профориентации создана, чтобы помочь школьникам принимать обоснованные решения о будущей карьере.">
+                This career guidance platform was created to help high school students make informed decisions about their future careers.
+            </p>
+            <h3 data-en="Project Goals:" data-ru="Цели Проекта:">Project Goals:</h3>
+            <ul>
+                <li data-en="Provide accessible career guidance for students" data-ru="Предоставить доступную профориентацию для студентов">Provide accessible career guidance for students</li>
+                <li data-en="Help discover careers based on individual strengths" data-ru="Помочь найти профессии на основе индивидуальных сильных сторон">Help discover careers based on individual strengths</li>
+                <li data-en="Offer insights into growing career fields" data-ru="Предложить информацию о растущих профессиональных областях">Offer insights into growing career fields</li>
+                <li data-en="Support bilingual students (English & Russian)" data-ru="Поддерживать билингвальных студентов (Английский и Русский)">Support bilingual students (English & Russian)</li>
+            </ul>
+            <p style="margin-top: 20px;" data-en="The test uses a comprehensive algorithm that evaluates your responses across multiple dimensions: interests, work style, skills, and values." data-ru="Тест использует комплексный алгоритм, который оценивает твои ответы по нескольким измерениям: интересы, стиль работы, навыки и ценности.">
+                The test uses a comprehensive algorithm that evaluates your responses across multiple dimensions: interests, work style, skills, and values.
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo" data-en="Career Guide" data-ru="Карьерный Гид">Career Guide</div>
+            <div class="controls">
+                <button class="btn-small lang-btn active-lang" data-lang="en">EN</button>
+                <button class="btn-small lang-btn" data-lang="ru">RU</button>
+                <button class="btn-small theme-toggle" id="themeToggle">🌙</button>
+            </div>
+        </header>
+
+        <!-- Landing Page -->
+        <div class="landing" id="landing">
+            <h1 data-en="Find Your Perfect Career" data-ru="Найди Свою Идеальную Профессию">Find Your Perfect Career</h1>
+            <p data-en="Take our 12-question assessment to discover careers that match your interests, skills, and personality. Get personalized recommendations in just 5 minutes!" data-ru="Пройди наш тест из 12 вопросов, чтобы найти профессии, которые соответствуют твоим интересам, навыкам и личности. Получи персональные рекомендации всего за 5 минут!">
+                Take our 12-question assessment to discover careers that match your interests, skills, and personality. Get personalized recommendations in just 5 minutes!
+            </p>
+            <div>
+                <button class="btn-primary" onclick="startQuiz()" data-en="Start Test" data-ru="Начать Тест">Start Test</button>
+                <button class="btn-secondary" onclick="openAboutModal()" data-en="About Project" data-ru="О Проекте">About Project</button>
+            </div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div class="quiz" id="quiz">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-number" id="questionNumber"></div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="options"></div>
+            </div>
+
+            <div class="quiz-nav">
+                <button class="btn-secondary hidden" id="prevBtn" onclick="prevQuestion()" data-en="Previous" data-ru="Назад">Previous</button>
+                <button class="btn-primary" id="nextBtn" onclick="nextQuestion()" data-en="Next" data-ru="Далее">Next</button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let currentTheme = 'light';
+        let currentQuestion = 0;
+        let answers = [];
+
+        const questions = {
+            en: [
+                {
+                    question: "What type of activities do you enjoy most?",
+                    options: [
+                        { text: "Building or creating things with technology", score: { tech: 3, creative: 1 } },
+                        { text: "Helping people solve their problems", score: { healthcare: 3, business: 1 } },
+                        { text: "Creating content, art, or designs", score: { creative: 3, business: 1 } },
+                        { text: "Analyzing data and finding patterns", score: { tech: 2, business: 2 } }
+                    ]
+                },
+                {
+                    question: "How do you prefer to work?",
+                    options: [
+                        { text: "Independently with minimal supervision", score: { tech: 2, creative: 2 } },
+                        { text: "In a team with constant collaboration", score: { business: 3, healthcare: 2 } },
+                        { text: "A mix of both independent and team work", score: { tech: 1, business: 1, creative: 1 } },
+                        { text: "Directly with people, helping them", score: { healthcare: 3 } }
+                    ]
+                },
+                {
+                    question: "Which subject do you find most interesting?",
+                    options: [
+                        { text: "Math and Science", score: { tech: 3 } },
+                        { text: "Biology and Health Sciences", score: { healthcare: 3 } },
+                        { text: "Art, Design, or Communications", score: { creative: 3 } },
+                        { text: "Business, Economics, or Social Studies", score: { business: 3 } }
+                    ]
+                },
+                {
+                    question: "What's most important to you in a career?",
+                    options: [
+                        { text: "High salary and job security", score: { tech: 2, business: 2 } },
+                        { text: "Making a difference in people's lives", score: { healthcare: 3 } },
+                        { text: "Creative freedom and self-expression", score: { creative: 3 } },
+                        { text: "Continuous learning and challenges", score: { tech: 3 } }
+                    ]
+                },
+                {
+                    question: "How do you handle problems?",
+                    options: [
+                        { text: "I analyze data and think logically", score: { tech: 3, business: 1 } },
+                        { text: "I talk to others and find collaborative solutions", score: { business: 2, healthcare: 2 } },
+                        { text: "I think creatively and try new approaches", score: { creative: 3, tech: 1 } },
+                        { text: "I stay calm and focus on helping others first", score: { healthcare: 3 } }
+                    ]
+                },
+                {
+                    question: "What type of work environment appeals to you?",
+                    options: [
+                        { text: "Modern office or remote work", score: { tech: 2, business: 2 } },
+                        { text: "Hospital or clinic setting", score: { healthcare: 3 } },
+                        { text: "Creative studio or flexible space", score: { creative: 3 } },
+                        { text: "Dynamic office with client meetings", score: { business: 3 } }
+                    ]
+                },
+                {
+                    question: "How comfortable are you with technology?",
+                    options: [
+                        { text: "Very comfortable - I love learning new tech", score: { tech: 3 } },
+                        { text: "Comfortable - I can learn what I need", score: { tech: 1, business: 2, creative: 1 } },
+                        { text: "Somewhat comfortable - I prefer other tools", score: { healthcare: 2, creative: 2 } },
+                        { text: "Not very comfortable - I prefer hands-on work", score: { healthcare: 3 } }
+                    ]
+                },
+                {
+                    question: "What motivates you most?",
+                    options: [
+                        { text: "Solving complex technical challenges", score: { tech: 3 } },
+                        { text: "Seeing people's lives improve", score: { healthcare: 3 } },
+                        { text: "Creating something unique and beautiful", score: { creative: 3 } },
+                        { text: "Achieving business goals and growth", score: { business: 3 } }
+                    ]
+                },
+                {
+                    question: "How do you spend your free time?",
+                    options: [
+                        { text: "Gaming, coding, or exploring tech", score: { tech: 3 } },
+                        { text: "Volunteering or helping others", score: { healthcare: 3 } },
+                        { text: "Drawing, designing, or creating content", score: { creative: 3 } },
+                        { text: "Reading business news or learning new skills", score: { business: 3 } }
+                    ]
+                },
+                {
+                    question: "What type of impact do you want to make?",
+                    options: [
+                        { text: "Innovate and advance technology", score: { tech: 3 } },
+                        { text: "Improve health and save lives", score: { healthcare: 3 } },
+                        { text: "Inspire people through creativity", score: { creative: 3 } },
+                        { text: "Build successful businesses", score: { business: 3 } }
+                    ]
+                },
+                {
+                    question: "How do you handle stress?",
+                    options: [
+                        { text: "I troubleshoot and fix the problem systematically", score: { tech: 3 } },
+                        { text: "I stay calm and prioritize people's wellbeing", score: { healthcare: 3 } },
+                        { text: "I take breaks and find creative outlets", score: { creative: 3 } },
+                        { text: "I strategize and delegate tasks", score: { business: 3 } }
+                    ]
+                },
+                {
+                    question: "What skill are you most proud of?",
+                    options: [
+                        { text: "Problem-solving and logical thinking", score: { tech: 3 } },
+                        { text: "Empathy and caring for others", score: { healthcare: 3 } },
+                        { text: "Creativity and artistic abilities", score: { creative: 3 } },
+                        { text: "Leadership and communication", score: { business: 3 } }
+                    ]
+                }
+            ],
+            ru: [
+                {
+                    question: "Какие занятия тебе нравятся больше всего?",
+                    options: [
+                        { text: "Создавать что-то с помощью технологий", score: { tech: 3, creative: 1 } },
+                        { text: "Помогать людям решать их проблемы", score: { healthcare: 3, business: 1 } },
+                        { text: "Создавать контент, искусство или дизайн", score: { creative: 3, business: 1 } },
+                        { text: "Анализировать данные и находить закономерности", score: { tech: 2, business: 2 } }
+                    ]
+                },
+                {
+                    question: "Как ты предпочитаешь работать?",
+                    options: [
+                        { text: "Самостоятельно с минимальным контролем", score: { tech: 2, creative: 2 } },
+                        { text: "В команде с постоянным сотрудничеством", score: { business: 3, healthcare: 2 } },
+                        { text: "Комбинация самостоятельной и командной работы", score: { tech: 1, business: 1, creative: 1 } },
+                        { text: "Напрямую с людьми, помогая им", score: { healthcare: 3 } }
+                    ]
+                },
+                {
+                    question: "Какой предмет тебе интереснее всего?",
+                    options: [
+                        { text: "Математика и Наука", score: { tech: 3 } },
+                        { text: "Биология и Медицина", score: { healthcare: 3 } },
+                        { text: "Искусство, Дизайн или Коммуникации", score: { creative: 3 } },
+                        { text: "Бизнес, Экономика или Обществознание", score: { business: 3 } }
+                    ]
+                },
+                {
+                    question: "Что для тебя важнее всего в карьере?",
+                    options: [
+                        { text: "Высокая зарплата и стабильность", score: { tech: 2, business: 2 } },
+                        { text: "Помогать людям и менять их жизни", score: { healthcare: 3 } },
+                        { text: "Творческая свобода и самовыражение", score: { creative: 3 } },
+                        { text: "Постоянное обучение и вызовы", score: { tech: 3 } }
+                    ]
+                },
+                {
+                    question: "Как ты решаешь проблемы?",
+                    options: [
+                        { text: "Анализирую данные и думаю логически", score: { tech: 3, business: 1 } },
+                        { text: "Обсуждаю с другими и ищу совместные решения", score: { business: 2, healthcare: 2 } },
+                        { text: "Думаю креативно и пробую новые подходы", score: { creative: 3, tech: 1 } },
+                        { text: "Сохраняю спокойствие и фокусируюсь на помощи другим", score: { healthcare: 3 } }
+                    ]
+                },
+                {
+                    question: "Какая рабочая среда тебе привлекательна?",
+                    options: [
+                        { text: "Современный офис или удалённая работа", score: { tech: 2, business: 2 } },
+                        { text: "Больница или клиника", score: { healthcare: 3 } },
+                        { text: "Творческая студия или гибкое пространство", score: { creative: 3 } },
+                        { text: "Динамичный офис со встречами с клиентами", score: { business: 3 } }
+                    ]
+                },
+                {
+                    question: "Насколько тебе комфортно с технологиями?",
+                    options: [
+                        { text: "Очень комфортно - обожаю изучать новые технологии", score: { tech: 3 } },
+                        { text: "Комфортно - могу научиться тому, что нужно", score: { tech: 1, business: 2, creative: 1 } },
+                        { text: "Относительно комфортно - предпочитаю другие инструменты", score: { healthcare: 2, creative: 2 } },
+                        { text: "Не очень комфортно - предпочитаю практическую работу", score: { healthcare: 3 } }
+                    ]
+                },
+                {
+                    question: "Что тебя мотивирует больше всего?",
+                    options: [
+                        { text: "Решение сложных технических задач", score: { tech: 3 } },
+                        { text: "Улучшение жизни людей", score: { healthcare: 3 } },
+                        { text: "Создание чего-то уникального и красивого", score: { creative: 3 } },
+                        { text: "Достижение бизнес-целей и рост", score: { business: 3 } }
+                    ]
+                },
+                {
+                    question: "Как ты проводишь свободное время?",
+                    options: [
+                
