@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Guidance Test</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border: #e5e5e5;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --success: #10b981;
+            --disabled: #d1d5db;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent: #60a5fa;
+            --accent-hover: #3b82f6;
+            --border: #3a3a3a;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --disabled: #4b5563;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            transition: background 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-small {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .btn-small:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .active-lang {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .info-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px var(--shadow);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .info-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px var(--shadow);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px var(--shadow);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--bg-secondary);
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: var(--text-secondary);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            font-size: 1.8em;
+        }
+
+        .modal h3 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .modal p {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .modal ul {
+            margin-left: 25px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .modal li {
+            margin: 10px 0;
+        }
+
+        .landing {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+        }
+
+        .landing h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .landing p {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            line-height: 1.8;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            border-radius: 12px;
+            font-size: 1.15em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: var(--disabled);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            padding: 16px 43px;
+            border-radius: 12px;
+            font-size: 1.15em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary:disabled {
+            border-color: var(--disabled);
+            color: var(--disabled);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .quiz {
+            display: none;
+        }
+
+        .quiz.active {
+            display: block;
+        }
+
+        .progress-container {
+            margin-bottom: 40px;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px var(--shadow);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--success));
+            transition: width 0.4s ease;
+            border-radius: 10px;
+        }
+
+        .question-card {
+            background: var(--bg-secondary);
+            padding: 45px;
+            border-radius: 20px;
+            margin-bottom: 35px;
+            border: 2px solid var(--border);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .question-number {
+            color: var(--accent);
+            font-size: 0.95em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .question-text {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 35px;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .likert-scale {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .likert-option {
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            padding: 20px 28px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.05em;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .likert-option:hover {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: white;
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .likert-option.selected {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .likert-radio {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: white;
+            flex-shrink: 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .likert-option:hover .likert-radio,
+        .likert-option.selected .likert-radio {
+            border-color: white;
+        }
+
+        .likert-option.selected .likert-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .results {
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .result-header h1 {
+            font-size: 2.5em;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .result-card {
+            background: var(--bg-secondary);
+            padding: 45px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid var(--accent);
+            box-shadow: 0 8px 24px var(--shadow);
+        }
+
+        .result-card h2 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .result-card p {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            font-size: 1.15em;
+            line-height: 1.8;
+        }
+
+        .career-match {
+            background: var(--bg-primary);
+            padding: 28px;
+            border-radius: 14px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent);
+        }
+
+        .career-match h3 {
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            font-size: 1.4em;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 8px 8px 8px 0;
+        }
+
+        .badge-salary {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        [data-theme="dark"] .badge-salary {
+            background: #14532d;
+            color: #86efac;
+        }
+
+        .badge-growth {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        [data-theme="dark"] .badge-growth {
+            background: #713f12;
+            color: #fde047;
+        }
+
+        @media (max-width: 768px) {
+            .landing h1 { font-size: 2.2em; }
+            .question-card { padding: 30px 25px; }
+            .question-text { font-size: 1.25em; }
+            .likert-option { padding: 18px 20px; }
+            .quiz-nav { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <button class="info-btn" id="infoBtn">ℹ️</button>
+
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <button class="modal-close" id="infoClose">×</button>
+            <h2 id="infoTitle">What This Site Offers</h2>
+            <p id="infoDesc">This career guidance test helps high school students discover careers that match their interests, skills, and personality.</p>
+            <h3 id="infoHowTitle">How It Works:</h3>
+            <ul id="infoHowList">
+                <li>20 psychology-based questions</li>
+                <li>5-point rating scale for accuracy</li>
+                <li>Personalized career recommendations</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="modal" id="aboutModal">
+        <div class="modal-content">
+            <button class="modal-close" id="aboutClose">×</button>
+            <h2 id="aboutTitle">About This Project</h2>
+            <p id="aboutDesc">This platform helps high school students make informed career decisions using scientific assessment methods.</p>
+            <h3 id="aboutGoalsTitle">Project Goals:</h3>
+            <ul id="aboutGoalsList">
+                <li>Provide accessible career guidance</li>
+                <li>Help discover careers based on strengths</li>
+                <li>Support bilingual students (EN & RU)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo" id="logoText">Career Guide</div>
+            <div class="controls">
+                <button class="btn-small lang-btn active-lang" data-lang="en">EN</button>
+                <button class="btn-small lang-btn" data-lang="ru">RU</button>
+                <button class="btn-small" id="themeToggle">🌙</button>
+            </div>
+        </header>
+
+        <div class="landing" id="landing">
+            <h1 id="landingTitle">Find Your Perfect Career</h1>
+            <p id="landingDesc">Take our 20-question assessment to discover careers that match your interests, skills, and personality!</p>
+            <div>
+                <button class="btn-primary" id="startBtn">Start Test</button>
+                <button class="btn-secondary" id="aboutBtn">About Project</button>
+            </div>
+        </div>
+
+        <div class="quiz" id="quiz">
+            <div class="progress-container">
+                <div class="progress-text" id="progressText"></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-number" id="questionNumber"></div>
+                <div class="question-text" id="questionText"></div>
+                <div class="likert-scale" id="likertScale"></div>
+            </div>
+
+            <div class="quiz-nav">
+                <button class="btn-secondary" id="prevBtn" disabled>← <span id="prevText">Previous</span></button>
+                <button class="btn-primary" id="nextBtn"><span id="nextText">Next</span> →</button>
+            </div>
+        </div>
+
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let currentQuestion = 0;
+        let answers = [];
+        let scores = { tech: 0, healthcare: 0, creative: 0, business: 0 };
+
+        const translations = {
+            en: {
+                logoText: "Career Guide",
+                landingTitle: "Find Your Perfect Career",
+                landingDesc: "Take our 20-question assessment to discover careers that match your interests, skills, and personality!",
+                startBtn: "Start Test",
+                aboutBtn: "About Project",
+                prevText: "Previous",
+                nextText: "Next",
+                finishText: "See Results",
+                questionOf: "Question {current} of {total}",
+                infoTitle: "What This Site Offers",
+                infoDesc: "This career guidance test helps high school students discover careers that match their interests, skills, and personality.",
+                aboutTitle: "About This Project",
+                aboutDesc: "This platform helps high school students make informed career decisions using scientific assessment methods.",
+                restartBtn: "Take Test Again"
+            },
+            ru: {
+                logoText: "Карьерный Гид",
+                landingTitle: "Найди Свою Идеальную Профессию",
+                landingDesc: "Пройди наш тест из 20 вопросов, чтобы найти профессии, которые соответствуют твоим интересам, навыкам и личности!",
+                startBtn: "Начать Тест",
+                aboutBtn: "О Проекте",
+                prevText: "Назад",
+                nextText: "Далее",
+                finishText: "Показать Результаты",
+                questionOf: "Вопрос {current} из {total}",
+                infoTitle: "Что Предлагает Этот Сайт",
+                infoDesc: "Этот тест помогает школьникам найти профессии, которые соответствуют их интересам, навыкам и личности.",
+                aboutTitle: "О Проекте",
+                aboutDesc: "Эта платформа помогает школьникам принимать обоснованные карьерные решения, используя научные методы оценки.",
+                restartBtn: "Пройти Снова"
+            }
+        };
+
+        const questions = {
+            en: [
+                { q: "When I work at a computer or with technology, I feel engaged and don't get tired of it.", type: "tech" },
+                { q: "I enjoy helping other people solve their problems or overcome challenges.", type: "healthcare" },
+                { q: "I prefer tasks where I can use my imagination and create something unique.", type: "creative" },
+                { q: "I feel comfortable taking the lead in group projects and organizing tasks.", type: "business" },
+                { q: "I find it easy to understand numbers, logic, and systematic thinking.", type: "tech" },
+                { q: "It's important to me that my work directly helps improve people's lives.", type: "healthcare" },
+                { q: "I'm good at expressing my thoughts through art, writing, or design.", type: "creative" },
+                { q: "I enjoy analyzing business strategies and thinking about how to grow organizations.", type: "business" },
+                { q: "I like figuring out how things work and solving technical problems.", type: "tech" },
+                { q: "People often come to me when they need emotional support or advice.", type: "healthcare" },
+                { q: "I prefer work that allows me creative freedom and self-expression.", type: "creative" },
+                { q: "I'm motivated by achieving goals and seeing measurable results.", type: "business" },
+                { q: "I enjoy learning new programming languages, software, or technical skills.", type: "tech" },
+                { q: "I feel satisfied when I can make someone feel better or healthier.", type: "healthcare" },
+                { q: "I often come up with creative solutions that others haven't thought of.", type: "creative" },
+                { q: "I'm comfortable with public speaking and persuading others.", type: "business" },
+                { q: "I prefer tasks with clear rules and logical steps to follow.", type: "tech" },
+                { q: "I'm naturally empathetic and can sense how others are feeling.", type: "healthcare" },
+                { q: "I see the world differently than most people and enjoy expressing that perspective.", type: "creative" },
+                { q: "I'm interested in entrepreneurship and building successful ventures.", type: "business" }
+            ],
+            ru: [
+                { q: "Когда я работаю за компьютером или с технологиями, я чувствую вовлечённость и не устаю.", type: "tech" },
+                { q: "Мне нравится помогать другим людям решать их проблемы или преодолевать трудности.", type: "healthcare" },
+                { q: "Я предпочитаю задачи, где могу использовать воображение и создать что-то уникальное.", type: "creative" },
+                { q: "Мне комфортно брать на себя лидерство в групповых проектах и организовывать задачи.", type: "business" },
+                { q: "Мне легко даются числа, логика и систематическое мышление.", type: "tech" },
+                { q: "Для меня важно, чтобы моя работа напрямую улучшала жизни людей.", type: "healthcare" },
+                { q: "Я хорошо выражаю свои мысли через искусство, письмо или дизайн.", type: "creative" },
+                { q: "Мне нравится анализировать бизнес-стратегии и думать о росте организаций.", type: "business" },
+                { q: "Мне нравится разбираться, как всё работает, и решать технические проблемы.", type: "tech" },
+                { q: "Люди часто приходят ко мне, когда нужна эмоциональная поддержка или совет.", type: "healthcare" },
+                { q: "Я предпочитаю работу, которая даёт творческую свободу и самовыражение.", type: "creative" },
+                { q: "Меня мотивируют достижение целей и видимые результаты.", type: "business" },
+                { q: "Мне нравится изучать новые языки программирования, софт или технические навыки.", type: "tech" },
+                { q: "Я чувствую удовлетворение, когда могу помочь кому-то почувствовать себя лучше.", type: "healthcare" },
+                { q: "Я часто придумываю креативные решения, о которых другие не подумали.", type: "creative" },
+                { q: "Мне комфортно выступать публично и убеждать других.", type: "business" },
+                { q: "Я предпочитаю задачи с чёткими правилами и логическими шагами.", type: "tech" },
+                { q: "Я от природы эмпатичный и могу чувствовать эмоции других.", type: "healthcare" },
+                { q: "Я вижу мир иначе, чем большинство, и люблю выражать эту перспективу.", type: "creative" },
+                { q: "Мне интересно предпринимательство и создание успешных предприятий.", type: "business" }
+            ]
+        };
+
+        const likertOptions = {
+            en: ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"],
+            ru: ["Совершенно не согласен", "Не согласен", "Нейтрально", "Согласен", "Полностью согласен"]
+        };
+
+        const careers = {
+            tech: {
+                en: { title: "🖥️ Technology Career Path", desc: "You have a strong aptitude for technology!", careers: [
+                    { name: "Software Developer", salary: "$127,000/year", growth: "26% growth" },
+                    { name: "Data Scientist", salary: "$103,500/year", growth: "35% growth" },
+                    { name: "Cybersecurity Specialist", salary: "$112,000/year", growth: "High demand" }
+                ]},
+                ru: { title: "🖥️ IT-Карьера", desc: "У тебя сильные способности к технологиям!", careers: [
+                    { name: "Разработчик ПО", salary: "$127,000/год", growth: "Рост 26%" },
+                    { name: "Дата-Сайентист", salary: "$103,500/год", growth: "Рост 35%" },
+                    { name: "Эксперт по Кибербезопасности", salary: "$112,000/год", growth: "Высокий спрос" }
+                ]}
+            },
+            healthcare: {
+                en: { title: "🏥 Healthcare Career Path", desc: "You have a caring nature and empathy!", careers: [
+                    { name: "Nurse Practitioner", salary: "$120,680/year", growth: "40% growth" },
+                    { name: "Therapist", salary: "$53,000+/year", growth: "Growing field" },
+                    { name: "Medical Assistant", salary: "$37,000/year", growth: "16% growth" }
+                ]},
+                ru: { title: "🏥 Медицинская Карьера", desc: "У тебя заботливая натура и эмпатия!", careers: [
+                    { name: "Медсестра-Практик", salary: "$120,680/год", growth: "Рост 40%" },
+                    { name: "Психотерапевт", salary: "$53,000+/год", growth: "Растущая сфера" },
+                    { name: "Медицинский Ассистент", salary: "$37,000/год", growth: "Рост 16%" }
+                ]}
+            },
+            creative: {
+                en: { title: "🎨 Creative Career Path", desc: "You're creative and artistic!", careers: [
+                    { name: "UX/UI Designer", salary: "$85,000/year", growth: "Fast growth" },
+                    { name: "Graphic Designer", salary: "$50,710/year", growth: "Steady" },
+                    { name: "Content Creator", salary: "$60,000+/year", growth: "High demand" }
+                ]},
+                ru: { title: "🎨 Творческая Карьера", desc: "Ты креативный и артистичный!", careers: [
+                    { name: "UX/UI Дизайнер", salary: "$85,000/год", growth: "Быстрый рост" },
+                    { name: "Графический Дизайнер", salary: "$50,710/год", growth: "Стабильный" },
+                    { name: "Контент-Креатор", salary: "$60,000+/год", growth: "Высокий спрос" }
+                ]}
+            },
+            business: {
+                en: { title: "💼 Business Career Path", desc: "You have business acumen!", careers: [
+                    { name: "Digital Marketer", salary: "$77,000/year", growth: "High demand" },
+                    { name: "Financial Analyst", salary: "$83,660/year", growth: "9% growth" },
+                    { name: "Project Manager", salary: "$95,000/year", growth: "Growing" }
+                ]},
+                ru: { title: "💼 Бизнес-Карьера", desc: "У тебя деловая хватка!", careers: [
+                    { name: "Цифровой Маркетолог", salary: "$77,000/год", growth: "Высокий спрос" },
+                    { name: "Финансовый Аналитик", salary: "$83,660/год", growth: "Рост 9%" },
+                    { name: "Проджект-Менеджер", salary: "$95,000/год", growth: "Растёт" }
+                ]}
+            }
+        };
+
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            document.getElementById('logoText').textContent = t.logoText;
+            document.getElementById('landingTitle').textContent = t.landingTitle;
+            document.getElementById('landingDesc').textContent = t.landingDesc;
+            document.getElementById('startBtn').textContent = t.startBtn;
+            document.getElementById('aboutBtn').textContent = t.aboutBtn;
+            document.getElementById('prevText').textContent = t.prevText;
+            document.getElementById('nextText').textContent = t.nextText;
+            document.getElementById('infoTitle').textContent = t.infoTitle;
+            document.getElementById('infoDesc').textContent = t.infoDesc;
+            document.getElementById('aboutTitle').textContent = t.aboutTitle;
+            document.getElementById('aboutDesc').textContent =
